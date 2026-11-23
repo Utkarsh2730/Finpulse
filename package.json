@@ -1,0 +1,19 @@
+{
+  "name": "finpulse-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Finpulse expense approvals: company registration and sign-in for employees, managers and company admins.",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node code/server/index.js",
+    "dev": "node --watch code/server/index.js",
+    "seed": "node code/server/seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0"
+  }
+}
