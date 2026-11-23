@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>Employee portal · Finpulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="auth" data-portal="employee">
+  <header class="auth-top">
+    <div class="brand">
+      <span class="logo">Finpulse</span>
+      <span class="portal-chip">Employee portal</span>
+    </div>
+    <button class="btn" type="button" id="signOut">Sign out</button>
+  </header>
+
+  <main class="auth-main">
+    <section class="auth-card wide signed-in">
+      <div class="card-head">
+        <h1 id="who"></h1>
+        <p id="title"></p>
+      </div>
+      <dl>
+        <dt>Email</dt>
+        <dd id="email"></dd>
+        <dt>Company</dt>
+        <dd id="company"></dd>
+      </dl>
+      <p class="fine">The Employee portal screens (new claim, recent claims, claim history) are built next.</p>
+    </section>
+  </main>
+
+  <footer class="auth-foot">
+    <span>Privacy</span>
+    <span>Terms</span>
+    <span>Help</span>
+  </footer>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+:root {
+  --page: #f5f8f7;
+  --card: #ffffff;
+  --ink: #172d32;
+  --muted: #718084;
+  --soft: #8a999c;
+  --line: #e2e9e6;
+  --field: #cfdad6;
+  --check: #a6b9b9;
+  --label: #42636d;
+  --brand: #167d70;
+  --brand-dark: #0f6157;
+  --error: #b42318;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  min-width: 1024px;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--page);
+  color: var(--ink);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+a {
+  color: var(--brand);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 48px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.help {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 16px 60px;
+}
+
+.card {
+  width: 400px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 36px 36px 32px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.heading h1 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.heading p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field label, .label-row label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label-row a {
+  font-size: 12px;
+}
+
+.field input[type="email"], .input-box {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--field);
+  border-radius: 6px;
+}
+
+.field input[type="email"], .input-box input {
+  padding: 11px 12px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+
+.input-box {
+  display: flex;
+  align-items: center;
+}
+
+.input-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
+}
+
+.field input[type="email"]:focus, .input-box:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 0.5px var(--brand);
+}
+
+.show {
+  padding: 0 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.show:hover {
+  color: var(--ink);
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--label);
+  cursor: pointer;
+}
+
+.remember input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--brand);
+}
+
+.message {
+  margin: 0;
+  font-size: 12px;
+  color: var(--error);
+}
+
+.message:empty {
+  display: none;
+}
+
+.message.info {
+  color: var(--label);
+}
+
+.submit {
+  padding: 13px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--brand);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--brand-dark);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  padding: 28px 48px;
+  font-size: 11px;
+  color: var(--soft);
+}
+
+.links {
+  display: flex;
+  gap: 20px;
+}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>Manager portal · Finpulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="auth" data-portal="manager">
+  <header class="auth-top">
+    <div class="brand">
+      <span class="logo">Finpulse</span>
+      <span class="portal-chip">Manager portal</span>
+    </div>
+    <button class="btn" type="button" id="signOut">Sign out</button>
+  </header>
+
+  <main class="auth-main">
+    <p class="form-note" id="welcome" hidden>Your company is registered and you are its admin. Add your team below.</p>
+
+    <section class="auth-card wide signed-in">
+      <div class="card-head">
+        <h1 id="who"></h1>
+        <p id="title"></p>
+      </div>
+      <dl>
+        <dt>Email</dt>
+        <dd id="email"></dd>
+        <dt>Company</dt>
+        <dd id="company"></dd>
+      </dl>
+      <p class="fine">The Manager portal screens (approval queue, claim details, decisions) are built next.</p>
+    </section>
+
+    <section class="auth-card wide" id="teamCard" hidden>
+      <div class="card-head">
+        <h1>Your team</h1>
+        <p>Your team signs in at <strong id="signInLink"></strong> with the email and password you give them.</p>
+      </div>
+      <ul id="team" class="team-list"></ul>
+
+      <div class="divider"></div>
+      <form id="addPerson" class="form-stack">
+        <h2 class="sub-title">Add a person</h2>
+        <div class="form-row">
+          <div class="field">
+            <label for="personName">Full name</label>
+            <input id="personName" type="text" placeholder="e.g. Harjot Dhillon" required>
+          </div>
+          <div class="field">
+            <label for="personTitle">Job title</label>
+            <input id="personTitle" type="text" placeholder="Optional">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="personEmail">Work email</label>
+            <input id="personEmail" type="email" placeholder="name@company.com" required>
+          </div>
+          <div class="field">
+            <label for="personRole">Role</label>
+            <select id="personRole">
+              <option value="employee">Employee</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="personPassword">Password</label>
+          <input id="personPassword" type="text" autocomplete="off" placeholder="At least 8 characters" required>
+          <span class="hint">Give this password to the person with the sign-in link.</span>
+        </div>
+        <p class="error" id="personError" role="alert"></p>
+        <p class="form-note" id="personDone" hidden></p>
+        <button class="btn primary" type="submit" style="justify-self:start">Add person</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="auth-foot">
+    <span>Privacy</span>
+    <span>Terms</span>
+    <span>Help</span>
+  </footer>
+  <script src="../js/portal.js"></script>
+</body>
+</html>
