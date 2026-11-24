@@ -66,19 +66,22 @@ All the code is in the `code` folder. The package files and the database sit nex
 code/
   server/
     index.js   Express server, session setup, and the pages in public/
-    db.js      SQLite tables: companies and users
+    db.js      SQLite tables: companies, users and claims
     auth.js    Register, sign in, sign out, who is signed in, and the admin's team tools
-    seed.js    Demo company Ubhar and its team
+    claims.js  Expense claims: list, submit, save and finish drafts
+    seed.js    Demo company Ubhar, its team and a few claims for Zoya Mir
   public/
     html/index.html     Home page: company registration (Figma "Company sign up")
     html/sign-in.html   Sign in for everyone
-    html/employee.html  Employee portal (signed-in page for now)
+    html/employee.html  Employee portal: My expenses (Figma "Employee portal")
     html/manager.html   Manager portal (signed-in page for now; the admin also adds people here)
-    css/styles.css      Styles for the home page and portals
+    css/styles.css      Styles for the home page and the manager portal
+    css/employee.css    Styles for the employee portal
     css/sign-in.css     Styles for the sign-in page
     js/register.js      Registration form
     js/sign-in.js       Sign-in form
-    js/portal.js        Portal pages and the admin's team tools
+    js/portal.js        Shared portal code: who is signed in, sign out, the admin's team tools
+    js/employee.js      Employee portal: stats, new claim form, drafts and recent claims
 data/finpulse.db  The database file (created on first run, not committed)
 package.json      Scripts and packages
 ```
@@ -93,6 +96,10 @@ package.json      Scripts and packages
 | GET /api/me | Signed in | The signed-in person and their company |
 | GET /api/team | Company admin | People in the company |
 | POST /api/team/people | Company admin | Add an employee or manager with a password the admin chooses |
+| POST /api/team/password | Company admin | Reset the password of someone in the company |
+| GET /api/claims | Signed in | Your own claims, newest first |
+| POST /api/claims | Signed in | Submit a claim, or save it as a draft |
+| POST /api/claims/:id | Signed in | Change or submit one of your drafts |
 
 ## Team
 

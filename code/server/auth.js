@@ -187,4 +187,30 @@ router.post('/team/people', signedIn, adminOnly, function (req, res) {
   res.status(201).json({ ok: true });
 });
 
-module.exports = router;
+router.post('/team/password', signedIn, adminOnly, function (req, res) {
+  const email = clean(req.body.email).toLowerCase();
+  const password = clean(req.body.password);
+
+  const person = db.prepare(`
+    SELECT id FROM users
+    WHERE email = ? AND company_id = ?
+  `).get(email, req.user.company_id);
+
+  if (!person) {
+    res.status(404).json({ error: 'This person is not in your company.' });
+    return;
+  }
+  if (password.length < 8) {
+    res.status(400).json({ error: 'Use a password of at least 8 characters.' });
+    return;
+  }
+
+  const hash = bcrypt.hashSync(password, 10);
+  db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, person.id);
+  res.json({ ok: true });
+});
+
+module.exports = {
+  router: router,
+  signedIn: signedIn
+};

@@ -1,12 +1,13 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const authRouter = require('./auth.js');
+const auth = require('./auth.js');
+const claimsRouter = require('./claims.js');
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+app.use(express.json({ limit: '15mb' }));
 
 app.use(session({
   secret: 'finpulse-session-secret',
@@ -19,7 +20,8 @@ app.use(session({
   }
 }));
 
-app.use('/api', authRouter);
+app.use('/api', auth.router);
+app.use('/api', claimsRouter);
 app.use(express.static(path.join(__dirname, '..', 'public', 'html'), { extensions: ['html'] }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
