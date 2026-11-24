@@ -74,14 +74,19 @@ code/
     html/index.html     Home page: company registration (Figma "Company sign up")
     html/sign-in.html   Sign in for everyone
     html/employee.html  Employee portal: My expenses (Figma "Employee portal")
+    html/overview.html  Employee portal: Overview (claims that need attention, latest activity)
+    html/reports.html   Employee portal: Reports (month chart, categories, claims table, CSV download)
     html/manager.html   Manager portal (signed-in page for now; the admin also adds people here)
     css/styles.css      Styles for the home page and the manager portal
-    css/employee.css    Styles for the employee portal
+    css/employee.css    Styles for the employee portal pages
     css/sign-in.css     Styles for the sign-in page
     js/register.js      Registration form
     js/sign-in.js       Sign-in form
     js/portal.js        Shared portal code: who is signed in, sign out, the admin's team tools
-    js/employee.js      Employee portal: stats, new claim form, drafts and recent claims
+    js/helpers.js       Shared helpers for the employee pages: money, dates, badges
+    js/employee.js      My expenses: stats, new claim form, drafts and recent claims
+    js/overview.js      Overview page
+    js/reports.js       Reports page
 data/finpulse.db  The database file (created on first run, not committed)
 package.json      Scripts and packages
 ```

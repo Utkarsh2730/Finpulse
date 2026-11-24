@@ -184,5 +184,14 @@ async function addPerson(event) {
   }
 }
 
+function showHelp() {
+  window.alert('Need help? Contact your company admin.');
+}
+
+const helpButton = document.getElementById('help');
+if (helpButton) {
+  helpButton.addEventListener('click', showHelp);
+}
+
 document.getElementById('signOut').addEventListener('click', signOut);
 startPortal();
