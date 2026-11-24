@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>Overview · Finpulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/employee.css">
+</head>
+<body data-portal="employee" data-page="overview">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo">Finpulse</span>
+      <span class="tagline">Expenses, in sync.</span>
+    </div>
+
+    <div class="workspace-chip">Employee workspace</div>
+
+    <p class="nav-heading">Workspace</p>
+    <nav class="nav">
+      <a class="nav-item active" href="overview.html">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a>
+      <a class="nav-item" href="employee.html">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>
+        My expenses
+      </a>
+      <a class="nav-item" href="reports.html">
+        <svg viewBox="0 0 24 24"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>
+        Reports
+      </a>
+    </nav>
+
+    <div class="policy-box">
+      <p class="policy-title">A little less paperwork.</p>
+      <p>A little more peace of mind. Your expenses, all in one place.</p>
+    </div>
+
+    <div class="nav bottom-nav">
+      <span class="nav-item small">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg>
+        Help &amp; support
+      </span>
+      <button class="nav-item small" type="button" id="signOut">
+        <svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="topbar">
+      <p class="crumbs">
+        <span>Workspace</span>
+        <span class="slash">/</span>
+        <span class="here">Overview</span>
+      </p>
+      <div class="top-right">
+        <span class="company" id="company"></span>
+        <svg class="bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></svg>
+        <div class="me">
+          <p class="me-name" id="who"></p>
+          <p class="me-title" id="title"></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">Welcome back</p>
+          <h1 id="greeting">Hello</h1>
+          <p class="lead">Here is where your expenses stand today.</p>
+        </div>
+        <a class="btn primary" href="employee.html">
+          New expense claim
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <section class="stats">
+        <div class="stat">
+          <div>
+            <p class="stat-label">Awaiting approval</p>
+            <p class="stat-value" id="pendingTotal">₹0.00</p>
+            <p class="stat-note" id="pendingCount">0 claims in review</p>
+          </div>
+          <span class="stat-icon amber">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg>
+          </span>
+        </div>
+        <div class="stat">
+          <div>
+            <p class="stat-label">Approved so far</p>
+            <p class="stat-value" id="approvedTotal">₹0.00</p>
+            <p class="stat-note" id="approvedCount">0 claims approved</p>
+          </div>
+          <span class="stat-icon green">
+            <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+        </div>
+        <div class="stat">
+          <div>
+            <p class="stat-label">Needs your attention</p>
+            <p class="stat-value" id="attentionCount">0</p>
+            <p class="stat-note">Drafts to finish and rejected claims</p>
+          </div>
+          <span class="stat-icon red">
+            <svg viewBox="0 0 24 24"><path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+        </div>
+      </section>
+
+      <div class="columns">
+        <section class="card">
+          <div class="card-head">
+            <h2>Needs your attention</h2>
+            <p>Finish your drafts and check what was rejected.</p>
+          </div>
+          <ul class="claim-list" id="attentionList"></ul>
+        </section>
+
+        <section class="card">
+          <div class="recent-head">
+            <div class="card-head">
+              <h2>Latest activity</h2>
+              <p>Your five newest claims.</p>
+            </div>
+            <a class="link" href="reports.html">
+              See reports
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <ul class="claim-list" id="activityList"></ul>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/helpers.js"></script>
+  <script src="../js/overview.js"></script>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

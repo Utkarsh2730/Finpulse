@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>Reports · Finpulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/employee.css">
+</head>
+<body data-portal="employee" data-page="reports">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo">Finpulse</span>
+      <span class="tagline">Expenses, in sync.</span>
+    </div>
+
+    <div class="workspace-chip">Employee workspace</div>
+
+    <p class="nav-heading">Workspace</p>
+    <nav class="nav">
+      <a class="nav-item" href="overview.html">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a>
+      <a class="nav-item" href="employee.html">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>
+        My expenses
+      </a>
+      <a class="nav-item active" href="reports.html">
+        <svg viewBox="0 0 24 24"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>
+        Reports
+      </a>
+    </nav>
+
+    <div class="policy-box">
+      <p class="policy-title">A little less paperwork.</p>
+      <p>A little more peace of mind. Your expenses, all in one place.</p>
+    </div>
+
+    <div class="nav bottom-nav">
+      <span class="nav-item small">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg>
+        Help &amp; support
+      </span>
+      <button class="nav-item small" type="button" id="signOut">
+        <svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="topbar">
+      <p class="crumbs">
+        <span>Workspace</span>
+        <span class="slash">/</span>
+        <span class="here">Reports</span>
+      </p>
+      <div class="top-right">
+        <span class="company" id="company"></span>
+        <svg class="bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></svg>
+        <div class="me">
+          <p class="me-name" id="who"></p>
+          <p class="me-title" id="title"></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">Your numbers</p>
+          <h1>Reports</h1>
+          <p class="lead">See where your money went and what has been paid back.</p>
+        </div>
+        <select class="month" id="year" aria-label="Year"></select>
+      </div>
+
+      <section class="stats">
+        <div class="stat">
+          <div>
+            <p class="stat-label">Total claimed</p>
+            <p class="stat-value" id="yearClaimed">₹0.00</p>
+            <p class="stat-note" id="yearCount">0 claims this year</p>
+          </div>
+          <span class="stat-icon grey">
+            <svg viewBox="0 0 24 24"><path d="M7 3h10v18H7z"/><path d="M10 8h4M10 12h4M10 16h2"/></svg>
+          </span>
+        </div>
+        <div class="stat">
+          <div>
+            <p class="stat-label">Approved</p>
+            <p class="stat-value" id="yearApproved">₹0.00</p>
+            <p class="stat-note" id="yearApprovedCount">0 claims approved</p>
+          </div>
+          <span class="stat-icon green">
+            <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+        </div>
+        <div class="stat">
+          <div>
+            <p class="stat-label">Average claim</p>
+            <p class="stat-value" id="yearAverage">₹0.00</p>
+            <p class="stat-note">Drafts are not counted</p>
+          </div>
+          <span class="stat-icon amber">
+            <svg viewBox="0 0 24 24"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>
+          </span>
+        </div>
+      </section>
+
+      <div class="columns even">
+        <section class="card">
+          <div class="card-head">
+            <h2>Month by month</h2>
+            <p>What you claimed each month.</p>
+          </div>
+          <div class="month-chart" id="monthChart"></div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2>By category</h2>
+            <p>Where your work expenses went.</p>
+          </div>
+          <ul class="category-list" id="categoryList"></ul>
+        </section>
+      </div>
+
+      <section class="card table-card">
+        <div class="recent-head">
+          <div class="card-head">
+            <h2>All claims</h2>
+            <p id="tableNote">Every claim you made this year.</p>
+          </div>
+          <div class="buttons">
+            <select class="filter" id="statusFilter" aria-label="Status">
+              <option value="all">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="draft">Draft</option>
+            </select>
+            <button class="btn" type="button" id="download">Download CSV</button>
+          </div>
+        </div>
+        <table class="claims-table">
+          <thead>
+            <tr>
+              <th>Claim</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th class="right">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="claimRows"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/helpers.js"></script>
+  <script src="../js/reports.js"></script>
+  <script src="../js/portal.js"></script>
+</body>
+</html>
