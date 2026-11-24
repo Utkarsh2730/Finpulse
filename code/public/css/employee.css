@@ -78,6 +78,7 @@ svg {
   display: flex;
   flex-direction: column;
   padding: 28px 16px 24px;
+  z-index: 20;
   background: var(--sidebar);
   color: var(--sidebar-text);
 }
@@ -176,6 +177,34 @@ button.nav-item:hover {
 
 .bottom-nav {
   margin-top: 28px;
+}
+
+.help-wrap {
+  position: relative;
+}
+
+.help-box {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% + 16px);
+  width: 280px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 12px 32px rgba(14, 33, 38, 0.14);
+}
+
+.help-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.help-text {
+  margin: 6px 0 14px;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .page {

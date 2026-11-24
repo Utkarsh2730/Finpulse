@@ -187,8 +187,17 @@ async function addPerson(event) {
   }
 }
 
-function showHelp() {
-  window.alert('Need help? Contact your company admin.');
+function toggleHelp(event) {
+  event.stopPropagation();
+  const box = document.getElementById('helpBox');
+  box.hidden = !box.hidden;
+}
+
+function closeHelp(event) {
+  const box = document.getElementById('helpBox');
+  if (event.target.id === 'helpClose' || !box.contains(event.target)) {
+    box.hidden = true;
+  }
 }
 
 function notificationText(claim) {
@@ -275,7 +284,8 @@ if (bellButton) {
 
 const helpButton = document.getElementById('help');
 if (helpButton) {
-  helpButton.addEventListener('click', showHelp);
+  helpButton.addEventListener('click', toggleHelp);
+  document.addEventListener('click', closeHelp);
 }
 
 document.getElementById('signOut').addEventListener('click', signOut);

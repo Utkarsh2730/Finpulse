@@ -40,10 +40,17 @@
     </div>
 
     <div class="nav bottom-nav">
-      <button class="nav-item small" type="button" id="help">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg>
-        Help &amp; support
-      </button>
+      <div class="help-wrap">
+        <button class="nav-item small" type="button" id="help">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg>
+          Help &amp; support
+        </button>
+        <div class="help-box" id="helpBox" hidden>
+          <p class="help-title">Help &amp; support</p>
+          <p class="help-text">Need help with a claim or your account? Contact your company admin.</p>
+          <button class="btn" type="button" id="helpClose">Got it</button>
+        </div>
+      </div>
       <button class="nav-item small" type="button" id="signOut">
         <svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>
         Sign out
