@@ -188,6 +188,44 @@ function showHelp() {
   window.alert('Need help? Contact your company admin.');
 }
 
+async function showNotifications() {
+  const claims = await getData('/claims');
+  const lines = [];
+
+  for (let i = 0; i < claims.length; i++) {
+    const claim = claims[i];
+    if (claim.status === 'approved') {
+      lines.push(claim.title + ' was approved.');
+    }
+    if (claim.status === 'rejected') {
+      lines.push(claim.title + ' was rejected.');
+    }
+    if (claim.status === 'pending') {
+      lines.push(claim.title + ' is waiting for review.');
+    }
+  }
+
+  if (lines.length === 0) {
+    window.alert('You have no notifications.');
+    return;
+  }
+
+  let howMany = lines.length;
+  if (howMany > 5) {
+    howMany = 5;
+  }
+  let message = 'Notifications\n';
+  for (let i = 0; i < howMany; i++) {
+    message = message + '\n- ' + lines[i];
+  }
+  window.alert(message);
+}
+
+const bellButton = document.getElementById('bell');
+if (bellButton) {
+  bellButton.addEventListener('click', showNotifications);
+}
+
 const helpButton = document.getElementById('help');
 if (helpButton) {
   helpButton.addEventListener('click', showHelp);
