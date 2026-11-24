@@ -57,8 +57,15 @@ async function startPortal() {
   setText('email', me.email);
   setText('company', me.company);
 
-  if (thisPortal === 'employee') {
+  const page = document.body.dataset.page;
+  if (page === 'expenses') {
     startEmployee();
+  }
+  if (page === 'overview') {
+    startOverview(me);
+  }
+  if (page === 'reports') {
+    startReports();
   }
 
   const teamCard = document.getElementById('teamCard');

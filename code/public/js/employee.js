@@ -1,4 +1,3 @@
-const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const RECEIPT_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
 const MAX_RECEIPT_SIZE = 10 * 1024 * 1024;
 
@@ -7,37 +6,6 @@ let showAll = false;
 let editingId = null;
 let receiptName = '';
 let receiptData = '';
-
-function money(amount) {
-  const text = Number(amount).toLocaleString('en-IN', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-  return '₹' + text;
-}
-
-function plural(count, word) {
-  if (count === 1) {
-    return count + ' ' + word;
-  }
-  return count + ' ' + word + 's';
-}
-
-function shortDate(date) {
-  if (!date) {
-    return 'No date';
-  }
-  const month = Number(date.slice(5, 7));
-  const day = date.slice(8, 10);
-  return MONTH_NAMES[month - 1].slice(0, 3) + ' ' + day;
-}
-
-function today() {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return now.getFullYear() + '-' + month + '-' + day;
-}
 
 function fillMonths() {
   const select = document.getElementById('month');
@@ -165,7 +133,7 @@ function claimItem(claim) {
 
   const badge = document.createElement('span');
   badge.className = 'badge ' + claim.status;
-  badge.textContent = claim.status.charAt(0).toUpperCase() + claim.status.slice(1);
+  badge.textContent = statusName(claim.status);
 
   const note = document.createElement('p');
   note.className = 'claim-note';
@@ -336,5 +304,16 @@ function startEmployee() {
   document.getElementById('claimForm').addEventListener('submit', submitClaim);
   document.getElementById('saveDraft').addEventListener('click', saveDraft);
   document.getElementById('cancelDraft').addEventListener('click', resetForm);
-  loadClaims();
+  openPage();
+}
+
+async function openPage() {
+  await loadClaims();
+  const params = new URLSearchParams(window.location.search);
+  const draftId = Number(params.get('draft'));
+  for (let i = 0; i < allClaims.length; i++) {
+    if (allClaims[i].id === draftId && allClaims[i].status === 'draft') {
+      editDraft(allClaims[i]);
+    }
+  }
 }
