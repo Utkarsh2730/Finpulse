@@ -58,6 +58,9 @@ async function startPortal() {
   setText('company', me.company);
 
   const page = document.body.dataset.page;
+  if (document.getElementById('bell')) {
+    loadNotifications();
+  }
   if (page === 'expenses') {
     startEmployee();
   }
@@ -188,42 +191,86 @@ function showHelp() {
   window.alert('Need help? Contact your company admin.');
 }
 
-async function showNotifications() {
+function notificationText(claim) {
+  if (claim.status === 'approved') {
+    return claim.title + ' was approved.';
+  }
+  if (claim.status === 'rejected') {
+    return claim.title + ' was rejected.';
+  }
+  return claim.title + ' is waiting for review.';
+}
+
+async function loadNotifications() {
   const claims = await getData('/claims');
-  const lines = [];
+  const list = document.getElementById('notificationList');
+  list.innerHTML = '';
+  let shown = 0;
+  let waiting = 0;
 
   for (let i = 0; i < claims.length; i++) {
     const claim = claims[i];
-    if (claim.status === 'approved') {
-      lines.push(claim.title + ' was approved.');
-    }
-    if (claim.status === 'rejected') {
-      lines.push(claim.title + ' was rejected.');
+    if (claim.status === 'draft') {
+      continue;
     }
     if (claim.status === 'pending') {
-      lines.push(claim.title + ' is waiting for review.');
+      waiting = waiting + 1;
     }
+    if (shown === 6) {
+      continue;
+    }
+
+    const item = document.createElement('li');
+    const dot = document.createElement('span');
+    dot.className = 'dot ' + claim.status;
+    const textBox = document.createElement('div');
+    const text = document.createElement('p');
+    text.className = 'notification-text';
+    text.textContent = notificationText(claim);
+    const meta = document.createElement('p');
+    meta.className = 'notification-meta';
+    meta.textContent = claim.code + ' · ' + money(claim.amount) + ' · ' + shortDate(claim.date);
+    textBox.appendChild(text);
+    textBox.appendChild(meta);
+    item.appendChild(dot);
+    item.appendChild(textBox);
+    list.appendChild(item);
+    shown = shown + 1;
   }
 
-  if (lines.length === 0) {
-    window.alert('You have no notifications.');
-    return;
+  if (shown === 0) {
+    const empty = document.createElement('li');
+    empty.className = 'empty';
+    empty.textContent = 'You have no notifications.';
+    list.appendChild(empty);
   }
 
-  let howMany = lines.length;
-  if (howMany > 5) {
-    howMany = 5;
+  const count = document.getElementById('bellCount');
+  count.textContent = waiting;
+  count.hidden = waiting === 0;
+  document.getElementById('notificationsNote').textContent = waiting + ' waiting for review';
+}
+
+function toggleNotifications(event) {
+  event.stopPropagation();
+  const panel = document.getElementById('notifications');
+  panel.hidden = !panel.hidden;
+  if (!panel.hidden) {
+    loadNotifications();
   }
-  let message = 'Notifications\n';
-  for (let i = 0; i < howMany; i++) {
-    message = message + '\n- ' + lines[i];
+}
+
+function closeNotifications(event) {
+  const panel = document.getElementById('notifications');
+  if (!panel.hidden && !panel.contains(event.target)) {
+    panel.hidden = true;
   }
-  window.alert(message);
 }
 
 const bellButton = document.getElementById('bell');
 if (bellButton) {
-  bellButton.addEventListener('click', showNotifications);
+  bellButton.addEventListener('click', toggleNotifications);
+  document.addEventListener('click', closeNotifications);
 }
 
 const helpButton = document.getElementById('help');
