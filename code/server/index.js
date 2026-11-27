@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const auth = require('./auth.js');
 const claimsRouter = require('./claims.js');
+const reviewRouter = require('./review.js');
 
 const app = express();
 const PORT = 3000;
@@ -22,6 +23,7 @@ app.use(session({
 
 app.use('/api', auth.router);
 app.use('/api', claimsRouter);
+app.use('/api', reviewRouter);
 app.use(express.static(path.join(__dirname, '..', 'public', 'html'), { extensions: ['html'] }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
