@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>Team · Finpulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/employee.css">
+  <link rel="stylesheet" href="../css/manager.css">
+</head>
+<body data-portal="manager finance" data-page="team">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo">Finpulse</span>
+      <span class="tagline">Expenses, in sync.</span>
+    </div>
+
+    <div class="workspace-chip" id="workspaceChip">Manager workspace</div>
+
+    <p class="nav-heading">Workspace</p>
+    <nav class="nav">
+      <a class="nav-item" href="manager.html" id="approvalsNav">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>
+        Approvals
+      </a>
+      <a class="nav-item" href="all-claims.html">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>
+        All claims
+      </a>
+      <a class="nav-item" href="company-reports.html" id="reportsNav" hidden>
+        <svg viewBox="0 0 24 24"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>
+        Reports
+      </a>
+      <a class="nav-item active" href="team.html" id="teamNav" hidden>
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .8 3 2.8 3 6"/></svg>
+        Team
+      </a>
+    </nav>
+
+    <div class="policy-box">
+      <p class="policy-title">Fair and fast.</p>
+      <p>Clear decisions help your team get reimbursed on time.</p>
+    </div>
+
+    <div class="nav bottom-nav">
+      <div class="help-wrap">
+        <button class="nav-item small" type="button" id="help">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg>
+          Help &amp; support
+        </button>
+        <div class="help-box" id="helpBox" hidden>
+          <p class="help-title">Help &amp; support</p>
+          <p class="help-text" id="helpText">Need help with a claim or your account? Contact your company admin.</p>
+          <div class="help-admin" id="helpAdmin" hidden>
+            <p class="help-text">You are the company admin. On the Team page you can add people, change roles and reset passwords.</p>
+            <p class="help-text">To change your own password, use Change password next to your name. You will need your current password.</p>
+            <a class="link" href="team.html">Go to Team</a>
+          </div>
+          <button class="btn" type="button" id="helpClose">Got it</button>
+        </div>
+      </div>
+      <button class="nav-item small" type="button" id="signOut">
+        <svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="topbar">
+      <p class="crumbs">
+        <span>Workspace</span>
+        <span class="slash">/</span>
+        <span class="here">Team</span>
+      </p>
+      <div class="top-right">
+        <span class="company" id="company"></span>
+        <div class="bell-wrap">
+          <button class="bell" type="button" id="bell" aria-label="Notifications">
+            <svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></svg>
+            <span class="bell-count" id="bellCount" hidden></span>
+          </button>
+          <div class="notifications" id="notifications" hidden>
+            <div class="notifications-head">
+              <p>Notifications</p>
+              <span id="notificationsNote"></span>
+            </div>
+            <ul class="notification-list" id="notificationList"></ul>
+            <a class="notifications-foot" id="approvalsFoot" href="manager.html">Go to approvals</a>
+          </div>
+        </div>
+        <div class="me">
+          <p class="me-name" id="who"></p>
+          <p class="me-title" id="title"></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">Your people</p>
+          <h1>Team</h1>
+          <p class="lead">Add people and reset passwords. Your team signs in at <strong id="signInLink"></strong></p>
+        </div>
+      </div>
+
+      <p class="welcome" id="notAdmin" hidden>Only the company admin can manage the team.</p>
+
+      <div class="columns" id="teamTools" hidden>
+        <section class="card">
+          <div class="card-head">
+            <h2>Everyone at your company</h2>
+            <p>Finpulse stores passwords scrambled, so reset one if someone forgets it.</p>
+          </div>
+          <ul class="team-list" id="team"></ul>
+        </section>
+
+        <div class="side-stack">
+          <div class="card details" id="details" hidden>
+            <p class="details-intro" id="detailsIntro"></p>
+            <pre id="detailsText"></pre>
+            <p class="claim-note">Finpulse cannot show this password again. Copy it now and send it to them.</p>
+            <button class="btn" type="button" id="copyDetails">Copy details</button>
+          </div>
+
+          <form class="card claim-form" id="passwordCard" hidden novalidate>
+            <div class="card-head">
+              <h2>Change your password</h2>
+              <p>Enter your current password first, so nobody else can lock you out.</p>
+            </div>
+            <div class="field">
+              <label for="currentPassword">Current password *</label>
+              <input id="currentPassword" type="password" autocomplete="current-password">
+            </div>
+            <div class="field">
+              <label for="newPassword">New password *</label>
+              <input id="newPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+            </div>
+            <p class="message" id="passwordError" role="alert"></p>
+            <p class="done" id="passwordDone" hidden>Your password is changed. Use it the next time you sign in.</p>
+            <div class="buttons">
+              <button class="btn" type="button" id="passwordCancel">Cancel</button>
+              <button class="btn primary" type="submit">Change password</button>
+            </div>
+          </form>
+
+          <form class="card claim-form" id="addPerson" novalidate>
+            <div class="card-head">
+              <h2>Add a person</h2>
+              <p>They can sign in as soon as you send them their details.</p>
+            </div>
+            <div class="field">
+              <label for="personName">Full name *</label>
+              <input id="personName" type="text" placeholder="Harjot Dhillon">
+            </div>
+            <div class="field">
+              <label for="personEmail">Work email *</label>
+              <input id="personEmail" type="email" placeholder="name@company.com">
+            </div>
+            <div class="two">
+              <div class="field">
+                <label for="personRole">Role *</label>
+                <select id="personRole">
+                  <option value="employee">Employee</option>
+                  <option value="manager">Manager</option>
+                  <option value="finance">Finance manager</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="personTitle">Job title</label>
+                <input id="personTitle" type="text" placeholder="Optional">
+              </div>
+            </div>
+            <div class="field">
+              <label for="personPassword">Password *</label>
+              <input id="personPassword" type="text" autocomplete="off" placeholder="At least 8 characters">
+            </div>
+            <p class="message" id="personError" role="alert"></p>
+            <div class="buttons">
+              <button class="btn primary" type="submit">Add person</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/helpers.js"></script>
+  <script src="../js/team.js"></script>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

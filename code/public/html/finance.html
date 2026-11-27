@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280">
+  <title>Finance approvals · Finpulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/employee.css">
+  <link rel="stylesheet" href="../css/manager.css">
+</head>
+<body data-portal="finance" data-page="approvals">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo">Finpulse</span>
+      <span class="tagline">Expenses, in sync.</span>
+    </div>
+
+    <div class="workspace-chip" id="workspaceChip">Finance workspace</div>
+
+    <p class="nav-heading">Workspace</p>
+    <nav class="nav">
+      <a class="nav-item active" href="finance.html" id="approvalsNav">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>
+        Approvals
+      </a>
+      <a class="nav-item" href="all-claims.html">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>
+        All claims
+      </a>
+      <a class="nav-item" href="company-reports.html" id="reportsNav" hidden>
+        <svg viewBox="0 0 24 24"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>
+        Reports
+      </a>
+      <a class="nav-item" href="team.html" id="teamNav" hidden>
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .8 3 2.8 3 6"/></svg>
+        Team
+      </a>
+    </nav>
+
+    <div class="policy-box">
+      <p class="policy-title">Fair and fast.</p>
+      <p>Clear decisions help your team get reimbursed on time.</p>
+    </div>
+
+    <div class="nav bottom-nav">
+      <div class="help-wrap">
+        <button class="nav-item small" type="button" id="help">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg>
+          Help &amp; support
+        </button>
+        <div class="help-box" id="helpBox" hidden>
+          <p class="help-title">Help &amp; support</p>
+          <p class="help-text" id="helpText">Need help with a claim or your account? Contact your company admin.</p>
+          <div class="help-admin" id="helpAdmin" hidden>
+            <p class="help-text">You are the company admin. On the Team page you can add people, change roles and reset passwords.</p>
+            <p class="help-text">To change your own password, use Change password next to your name. You will need your current password.</p>
+            <a class="link" href="team.html">Go to Team</a>
+          </div>
+          <button class="btn" type="button" id="helpClose">Got it</button>
+        </div>
+      </div>
+      <button class="nav-item small" type="button" id="signOut">
+        <svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="topbar">
+      <p class="crumbs">
+        <span>Workspace</span>
+        <span class="slash">/</span>
+        <span class="here">Finance approvals</span>
+      </p>
+      <div class="top-right">
+        <span class="company" id="company"></span>
+        <div class="bell-wrap">
+          <button class="bell" type="button" id="bell" aria-label="Notifications">
+            <svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></svg>
+            <span class="bell-count" id="bellCount" hidden></span>
+          </button>
+          <div class="notifications" id="notifications" hidden>
+            <div class="notifications-head">
+              <p>Notifications</p>
+              <span id="notificationsNote"></span>
+            </div>
+            <ul class="notification-list" id="notificationList"></ul>
+            <a class="notifications-foot" id="approvalsFoot" href="finance.html">Go to approvals</a>
+          </div>
+        </div>
+        <div class="me">
+          <p class="me-name" id="who"></p>
+          <p class="me-title" id="title"></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <p class="welcome" id="welcome" hidden>Your company is registered and you are its admin. Add your team on the <a href="team.html">Team</a> page.</p>
+
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">Checked by managers. Paid by finance.</p>
+          <h1>Approvals</h1>
+          <p class="lead">Claims your managers approved. Give the final yes before the money goes out.</p>
+        </div>
+      </div>
+
+      <section class="stats">
+        <div class="stat">
+          <div>
+            <p class="stat-label">Waiting for finance</p>
+            <p class="stat-value" id="waitingTotal">₹0.00</p>
+            <p class="stat-note" id="waitingCount">0 claims in the queue</p>
+          </div>
+          <span class="stat-icon amber">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg>
+          </span>
+        </div>
+        <div class="stat">
+          <div>
+            <p class="stat-label">Approved</p>
+            <p class="stat-value" id="approvedTotal">₹0.00</p>
+            <p class="stat-note" id="approvedCount">0 claims approved</p>
+          </div>
+          <span class="stat-icon green">
+            <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+        </div>
+        <div class="stat">
+          <div>
+            <p class="stat-label">Rejected</p>
+            <p class="stat-value" id="rejectedTotal">₹0.00</p>
+            <p class="stat-note" id="rejectedCount">0 claims rejected</p>
+          </div>
+          <span class="stat-icon red">
+            <svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>
+          </span>
+        </div>
+      </section>
+
+      <div class="columns">
+        <section class="card">
+          <div class="card-head">
+            <h2>Approved by a manager</h2>
+            <p>Oldest claims first, so nobody waits too long.</p>
+          </div>
+          <ul class="queue" id="queue"></ul>
+        </section>
+
+        <section class="card review" id="review">
+          <p class="review-empty" id="reviewEmpty">Pick a claim from the queue to review it.</p>
+
+          <div id="reviewBox" hidden>
+            <div class="card-head">
+              <p class="review-code" id="reviewCode"></p>
+              <h2 id="reviewTitle"></h2>
+              <p id="reviewPerson"></p>
+            </div>
+
+            <p class="review-amount" id="reviewAmount"></p>
+
+            <dl class="review-facts">
+              <dt>Category</dt>
+              <dd id="reviewCategory"></dd>
+              <dt>Expense date</dt>
+              <dd id="reviewDate"></dd>
+              <dt>Receipt</dt>
+              <dd id="reviewReceipt"></dd>
+            </dl>
+
+            <p class="review-label">Reason</p>
+            <p class="review-reason" id="reviewReason"></p>
+
+            <div id="managerNoteBox" hidden>
+              <p class="review-label">Manager note</p>
+              <p class="review-reason" id="managerNote"></p>
+            </div>
+
+            <div class="field">
+              <label for="reviewNote">Note to the employee</label>
+              <textarea id="reviewNote" rows="3" placeholder="Needed when you reject a claim"></textarea>
+            </div>
+
+            <p class="message" id="reviewError" role="alert"></p>
+
+            <div class="buttons">
+              <button class="btn reject" type="button" id="reject">Reject</button>
+              <button class="btn primary" type="button" id="approve">Approve</button>
+            </div>
+          </div>
+
+          <p class="done" id="reviewDone" hidden></p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/helpers.js"></script>
+  <script src="../js/approvals.js"></script>
+  <script src="../js/portal.js"></script>
+</body>
+</html>
