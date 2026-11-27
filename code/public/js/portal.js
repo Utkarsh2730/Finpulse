@@ -1,3 +1,5 @@
+let currentUser = null;
+
 async function getData(address) {
   const response = await fetch('/api' + address);
   const data = await response.json();
@@ -45,12 +47,13 @@ async function startPortal() {
     return;
   }
 
-  const thisPortal = document.body.dataset.portal;
-  if (me.role !== thisPortal) {
+  const portals = document.body.dataset.portal.split(' ');
+  if (!portals.includes(me.role)) {
     window.location.href = me.role + '.html';
     return;
   }
 
+  currentUser = me;
   localStorage.setItem('finpulse.profile', JSON.stringify(me));
   setText('who', me.name);
   setText('title', me.title);
@@ -70,120 +73,39 @@ async function startPortal() {
   if (page === 'reports') {
     startReports();
   }
-
-  const teamCard = document.getElementById('teamCard');
-  if (me.isAdmin && teamCard) {
-    teamCard.hidden = false;
-    document.getElementById('signInLink').textContent = window.location.origin + '/sign-in';
-    if (window.location.search.includes('new=1')) {
-      document.getElementById('welcome').hidden = false;
-    }
-    setUpTeamTools();
+  if (page === 'approvals') {
+    startApprovals(me);
   }
-}
-
-function setUpTeamTools() {
-  showTeam();
-  document.getElementById('addPerson').addEventListener('submit', addPerson);
-  document.getElementById('copyDetails').addEventListener('click', copyDetails);
-}
-
-async function showTeam() {
-  const people = await getData('/team');
-  const list = document.getElementById('team');
-  list.innerHTML = '';
-
-  for (let i = 0; i < people.length; i++) {
-    list.appendChild(personItem(people[i]));
+  if (page === 'all-claims') {
+    startAllClaims();
   }
-}
-
-function personItem(person) {
-  let role = 'Employee';
-  if (person.isAdmin) {
-    role = 'Admin';
-  } else if (person.role === 'manager') {
-    role = 'Manager';
+  if (page === 'team') {
+    startTeam(me);
+  }
+  if (page === 'company-reports') {
+    startCompanyReports();
   }
 
-  const item = document.createElement('li');
-  const text = document.createElement('span');
-  text.textContent = person.name + ' · ' + person.email + ' · ' + role;
-
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'btn';
-  button.textContent = 'Reset password';
-  button.addEventListener('click', function () {
-    resetPassword(person);
-  });
-
-  item.appendChild(text);
-  item.appendChild(button);
-  return item;
-}
-
-function showDetails(intro, name, email, password) {
-  const text = 'Hi ' + name + ', here are your Finpulse sign-in details.\n' +
-    'Sign in at: ' + window.location.origin + '/sign-in\n' +
-    'Email: ' + email + '\n' +
-    'Password: ' + password;
-
-  document.getElementById('detailsIntro').textContent = intro;
-  document.getElementById('detailsText').textContent = text;
-  document.getElementById('copyDetails').textContent = 'Copy details';
-  document.getElementById('details').hidden = false;
-  document.getElementById('details').scrollIntoView({
-    behavior: 'smooth',
-    block: 'center'
-  });
-}
-
-async function copyDetails() {
-  const text = document.getElementById('detailsText').textContent;
-  await navigator.clipboard.writeText(text);
-  document.getElementById('copyDetails').textContent = 'Copied';
-}
-
-async function resetPassword(person) {
-  const password = window.prompt('Type a new password for ' + person.name + ' (at least 8 characters).');
-  if (password === null) {
-    return;
+  const teamNav = document.getElementById('teamNav');
+  if (teamNav && me.isAdmin) {
+    teamNav.hidden = false;
   }
 
-  try {
-    await sendData('/team/password', {
-      email: person.email,
-      password: password
-    });
-    showDetails('Password reset for ' + person.name + '. Send them these details.', person.name, person.email, password);
-  } catch (error) {
-    window.alert(error.message);
+  const helpAdmin = document.getElementById('helpAdmin');
+  if (helpAdmin && me.isAdmin) {
+    helpAdmin.hidden = false;
+    document.getElementById('helpText').hidden = true;
   }
-}
 
-async function addPerson(event) {
-  event.preventDefault();
-  const errorBox = document.getElementById('personError');
-  errorBox.textContent = '';
+  if (me.role === 'finance' && document.getElementById('approvalsNav')) {
+    document.getElementById('approvalsNav').href = 'finance.html';
+    document.getElementById('approvalsFoot').href = 'finance.html';
+    setText('workspaceChip', 'Finance workspace');
+  }
 
-  const name = document.getElementById('personName').value;
-  const email = document.getElementById('personEmail').value;
-  const password = document.getElementById('personPassword').value;
-
-  try {
-    await sendData('/team/people', {
-      name: name,
-      email: email,
-      role: document.getElementById('personRole').value,
-      title: document.getElementById('personTitle').value,
-      password: password
-    });
-    showDetails(name + ' is added. Send them these details.', name, email.trim().toLowerCase(), password);
-    document.getElementById('addPerson').reset();
-    showTeam();
-  } catch (error) {
-    errorBox.textContent = error.message;
+  const reportsNav = document.getElementById('reportsNav');
+  if (reportsNav && me.role === 'finance') {
+    reportsNav.hidden = false;
   }
 }
 
@@ -201,6 +123,15 @@ function closeHelp(event) {
 }
 
 function notificationText(claim) {
+  if (claim.person && claim.status === 'manager_approved') {
+    return 'A manager approved ' + claim.title + ' from ' + claim.person + '.';
+  }
+  if (claim.person) {
+    return claim.person + ' sent ' + claim.title + ' for review.';
+  }
+  if (claim.status === 'manager_approved') {
+    return claim.title + ' was approved by your manager and is with finance.';
+  }
   if (claim.status === 'approved') {
     return claim.title + ' was approved.';
   }
@@ -210,26 +141,73 @@ function notificationText(claim) {
   return claim.title + ' is waiting for review.';
 }
 
+let notificationKeys = [];
+
+function seenStorageKey() {
+  return 'finpulse.seen.' + currentUser.email;
+}
+
+function readSeen() {
+  const saved = localStorage.getItem(seenStorageKey());
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  return [];
+}
+
+function markAllSeen() {
+  localStorage.setItem(seenStorageKey(), JSON.stringify(notificationKeys));
+  document.getElementById('bellCount').hidden = true;
+}
+
 async function loadNotifications() {
-  const claims = await getData('/claims');
+  let claims = [];
+  let waitingStatus = 'pending';
+  const role = currentUser.role;
+  if (role === 'finance') {
+    waitingStatus = 'manager_approved';
+  }
+  if (role === 'employee') {
+    claims = await getData('/claims');
+  } else {
+    const teamList = await getData('/review/claims');
+    for (let i = 0; i < teamList.length; i++) {
+      if (teamList[i].status === waitingStatus) {
+        claims.push(teamList[i]);
+      }
+    }
+  }
   const list = document.getElementById('notificationList');
   list.innerHTML = '';
+  const seen = readSeen();
+  notificationKeys = [];
   let shown = 0;
   let waiting = 0;
+  let unseen = 0;
 
   for (let i = 0; i < claims.length; i++) {
     const claim = claims[i];
     if (claim.status === 'draft') {
       continue;
     }
-    if (claim.status === 'pending') {
+    if (claim.status === waitingStatus || (role === 'employee' && claim.status === 'manager_approved')) {
       waiting = waiting + 1;
+    }
+
+    const key = claim.id + '-' + claim.status;
+    notificationKeys.push(key);
+    const isNew = !seen.includes(key);
+    if (isNew) {
+      unseen = unseen + 1;
     }
     if (shown === 6) {
       continue;
     }
 
     const item = document.createElement('li');
+    if (isNew) {
+      item.className = 'unseen';
+    }
     const dot = document.createElement('span');
     dot.className = 'dot ' + claim.status;
     const textBox = document.createElement('div');
@@ -255,17 +233,18 @@ async function loadNotifications() {
   }
 
   const count = document.getElementById('bellCount');
-  count.textContent = waiting;
-  count.hidden = waiting === 0;
+  count.textContent = unseen;
+  count.hidden = unseen === 0;
   document.getElementById('notificationsNote').textContent = waiting + ' waiting for review';
 }
 
-function toggleNotifications(event) {
+async function toggleNotifications(event) {
   event.stopPropagation();
   const panel = document.getElementById('notifications');
   panel.hidden = !panel.hidden;
   if (!panel.hidden) {
-    loadNotifications();
+    await loadNotifications();
+    markAllSeen();
   }
 }
 

@@ -46,7 +46,7 @@ function showStats() {
     const claim = allClaims[i];
     const inMonth = claim.date.startsWith(month);
 
-    if (claim.status === 'pending') {
+    if (claim.status === 'pending' || claim.status === 'manager_approved') {
       pendingTotal = pendingTotal + claim.amount;
       pendingCount = pendingCount + 1;
     }
@@ -75,13 +75,16 @@ function claimNote(claim) {
   if (claim.status === 'pending') {
     return 'Waiting for a manager to review.';
   }
+  if (claim.status === 'manager_approved') {
+    return 'Approved by your manager. Waiting for finance.';
+  }
   if (claim.reviewNote) {
     return '"' + claim.reviewNote + '"';
   }
   if (claim.status === 'approved') {
-    return 'Approved by your manager.';
+    return 'Approved by your manager and finance.';
   }
-  return 'Rejected by your manager.';
+  return 'This claim was rejected.';
 }
 
 function showClaims() {
@@ -274,7 +277,7 @@ async function saveClaim(status) {
     if (status === 'draft') {
       doneBox.textContent = 'Draft saved. You can finish it from Recent claims.';
     } else {
-      doneBox.textContent = 'Claim submitted. A manager will review it soon.';
+      doneBox.textContent = 'Claim submitted. A manager will review it, then finance.';
     }
     doneBox.hidden = false;
     await loadClaims();

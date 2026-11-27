@@ -32,9 +32,9 @@ function overviewItem(claim, withAction) {
     const note = document.createElement('p');
     note.className = 'claim-note';
     if (claim.reviewNote) {
-      note.textContent = 'Manager note: "' + claim.reviewNote + '"';
+      note.textContent = 'Reviewer note: "' + claim.reviewNote + '"';
     } else {
-      note.textContent = 'Your manager rejected this claim.';
+      note.textContent = 'This claim was rejected.';
     }
     const link = document.createElement('a');
     link.className = 'link';
@@ -70,7 +70,7 @@ async function startOverview(me) {
 
   for (let i = 0; i < claims.length; i++) {
     const claim = claims[i];
-    if (claim.status === 'pending') {
+    if (claim.status === 'pending' || claim.status === 'manager_approved') {
       pendingTotal = pendingTotal + claim.amount;
       pendingCount = pendingCount + 1;
     }
