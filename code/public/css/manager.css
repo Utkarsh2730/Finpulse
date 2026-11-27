@@ -1,0 +1,294 @@
+.welcome {
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.welcome a {
+  color: inherit;
+  font-weight: 600;
+}
+
+.queue {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.queue li {
+  border-top: 1px solid var(--line);
+}
+
+.queue li.empty {
+  padding: 22px 0;
+  color: var(--muted);
+}
+
+.queue-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 18px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.queue-item:hover {
+  background: var(--sunk);
+}
+
+.queue-item.selected {
+  background: var(--green-bg);
+}
+
+.queue-person {
+  color: var(--label);
+  font-size: 12px;
+}
+
+.review {
+  position: sticky;
+  top: 24px;
+}
+
+.review-empty {
+  padding: 40px 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.review-code {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.review .card-head h2 {
+  margin-top: 6px;
+}
+
+.review-amount {
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.review-facts {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px 12px;
+  margin: 20px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.review-facts dt {
+  color: var(--muted);
+}
+
+.review-facts dd {
+  margin: 0;
+}
+
+.review-label {
+  color: var(--label);
+  font-size: 12px;
+}
+
+.review-reason {
+  margin: 6px 0 20px;
+  line-height: 1.6;
+}
+
+.review .field {
+  margin-bottom: 12px;
+}
+
+.review .buttons {
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.btn.reject {
+  color: var(--red);
+}
+
+.btn.reject:hover {
+  border-color: var(--red);
+}
+
+.review .done {
+  margin-top: 16px;
+}
+
+.side-stack {
+  display: grid;
+  gap: 24px;
+}
+
+.team-list {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.person-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.person-meta {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.person-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.team-list .btn {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.role {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  color: var(--label);
+  font-size: 11px;
+}
+
+.role-select {
+  padding: 6px 10px;
+  border: 1px solid var(--field);
+  border-radius: 5px;
+  background: var(--card);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.role.admin {
+  border-color: var(--brand);
+  background: var(--green-bg);
+  color: var(--brand);
+}
+
+.details {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  border-color: var(--brand);
+}
+
+.details-intro {
+  font-weight: 500;
+}
+
+.details pre {
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--sunk);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.help-admin .help-text {
+  margin-bottom: 8px;
+}
+
+.help-admin .link {
+  margin: 4px 0 16px;
+}
+
+.page-head .buttons {
+  margin-top: 30px;
+}
+
+.month-chart.tall {
+  height: 280px;
+}
+
+.bar-value {
+  min-height: 16px;
+  color: var(--label);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.month-table th,
+.month-table td {
+  padding: 12px 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.month-table th:first-child,
+.month-table td:first-child {
+  text-align: left;
+}
+
+.month-table td.zero {
+  color: var(--soft);
+}
+
+.month-table tfoot td {
+  border-bottom: 0;
+  font-weight: 600;
+}
+
+.month-table .total {
+  font-weight: 600;
+}
+
+.person-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.person-link:hover {
+  text-decoration: underline;
+}
+
+.manager-pick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--label);
+  font-size: 12px;
+}
