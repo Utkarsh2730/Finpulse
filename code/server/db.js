@@ -23,9 +23,10 @@ db.exec(`
     name          TEXT NOT NULL,
     email         TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    role          TEXT NOT NULL CHECK (role IN ('employee', 'manager')),
+    role          TEXT NOT NULL CHECK (role IN ('employee', 'manager', 'finance')),
     is_admin      INTEGER NOT NULL DEFAULT 0,
     title         TEXT,
+    manager_id    INTEGER REFERENCES users(id) ON DELETE SET NULL,
     created_at    TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
@@ -40,10 +41,22 @@ db.exec(`
     reason       TEXT NOT NULL,
     receipt_name TEXT,
     receipt_data TEXT,
-    status       TEXT NOT NULL CHECK (status IN ('draft', 'pending', 'approved', 'rejected')),
+    status       TEXT NOT NULL CHECK (status IN ('draft', 'pending', 'manager_approved', 'approved', 'rejected')),
     review_note  TEXT,
+    finance_note TEXT,
     created_at   TEXT NOT NULL DEFAULT (datetime('now'))
   );
 `);
+
+const userColumns = db.prepare('PRAGMA table_info(users)').all();
+let hasManagerColumn = false;
+for (let i = 0; i < userColumns.length; i++) {
+  if (userColumns[i].name === 'manager_id') {
+    hasManagerColumn = true;
+  }
+}
+if (!hasManagerColumn) {
+  db.exec('ALTER TABLE users ADD COLUMN manager_id INTEGER REFERENCES users(id) ON DELETE SET NULL');
+}
 
 module.exports = db;

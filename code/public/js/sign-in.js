@@ -69,11 +69,7 @@ async function signIn(event) {
     }
 
     localStorage.setItem('finpulse.profile', JSON.stringify(data));
-    if (data.role === 'manager') {
-      window.location.href = 'manager.html';
-    } else {
-      window.location.href = 'employee.html';
-    }
+    window.location.href = data.role + '.html';
   } catch (error) {
     showError('Could not reach Finpulse. Check your connection and try again.');
     signInButton.disabled = false;

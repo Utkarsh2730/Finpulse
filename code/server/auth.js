@@ -27,13 +27,24 @@ function emailTaken(email) {
 
 function userInfo(user) {
   const company = db.prepare('SELECT name FROM companies WHERE id = ?').get(user.company_id);
+  let managerEmail = '';
+  let managerName = '';
+  if (user.manager_id) {
+    const manager = db.prepare('SELECT name, email FROM users WHERE id = ?').get(user.manager_id);
+    if (manager) {
+      managerEmail = manager.email;
+      managerName = manager.name;
+    }
+  }
   return {
     name: user.name,
     email: user.email,
     role: user.role,
     title: user.title,
     isAdmin: user.is_admin === 1,
-    company: company.name
+    company: company.name,
+    managerEmail: managerEmail,
+    managerName: managerName
   };
 }
 
@@ -153,6 +164,8 @@ router.post('/team/people', signedIn, adminOnly, function (req, res) {
   if (title === '') {
     if (role === 'manager') {
       title = 'Manager';
+    } else if (role === 'finance') {
+      title = 'Finance manager';
     } else {
       title = 'Employee';
     }
@@ -166,7 +179,7 @@ router.post('/team/people', signedIn, adminOnly, function (req, res) {
     res.status(400).json({ error: 'Enter a valid work email.' });
     return;
   }
-  if (role !== 'employee' && role !== 'manager') {
+  if (role !== 'employee' && role !== 'manager' && role !== 'finance') {
     res.status(400).json({ error: 'Pick a role.' });
     return;
   }
@@ -200,6 +213,10 @@ router.post('/team/password', signedIn, adminOnly, function (req, res) {
     res.status(404).json({ error: 'This person is not in your company.' });
     return;
   }
+  if (person.id === req.user.id) {
+    res.status(400).json({ error: 'Use Change password for your own account.' });
+    return;
+  }
   if (password.length < 8) {
     res.status(400).json({ error: 'Use a password of at least 8 characters.' });
     return;
@@ -207,6 +224,108 @@ router.post('/team/password', signedIn, adminOnly, function (req, res) {
 
   const hash = bcrypt.hashSync(password, 10);
   db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, person.id);
+  res.json({ ok: true });
+});
+
+router.post('/me/password', signedIn, function (req, res) {
+  const currentPassword = clean(req.body.currentPassword);
+  const newPassword = clean(req.body.newPassword);
+
+  if (!bcrypt.compareSync(currentPassword, req.user.password_hash)) {
+    res.status(400).json({ error: 'Your current password is wrong.' });
+    return;
+  }
+  if (newPassword.length < 8) {
+    res.status(400).json({ error: 'Use a new password of at least 8 characters.' });
+    return;
+  }
+
+  const hash = bcrypt.hashSync(newPassword, 10);
+  db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, req.user.id);
+  res.json({ ok: true });
+});
+
+router.post('/team/role', signedIn, adminOnly, function (req, res) {
+  const email = clean(req.body.email).toLowerCase();
+  const role = clean(req.body.role);
+
+  const person = db.prepare(`
+    SELECT * FROM users
+    WHERE email = ? AND company_id = ?
+  `).get(email, req.user.company_id);
+
+  if (!person) {
+    res.status(404).json({ error: 'This person is not in your company.' });
+    return;
+  }
+  if (person.id === req.user.id) {
+    res.status(400).json({ error: 'You cannot change your own role.' });
+    return;
+  }
+  if (role !== 'employee' && role !== 'manager' && role !== 'finance') {
+    res.status(400).json({ error: 'Pick a role.' });
+    return;
+  }
+
+  const defaultTitles = ['Employee', 'Manager', 'Finance manager'];
+  let title = person.title;
+  if (defaultTitles.includes(title)) {
+    if (role === 'manager') {
+      title = 'Manager';
+    } else if (role === 'finance') {
+      title = 'Finance manager';
+    } else {
+      title = 'Employee';
+    }
+  }
+
+  db.prepare(`
+    UPDATE users
+    SET role = ?, title = ?
+    WHERE id = ?
+  `).run(role, title, person.id);
+
+  if (role !== 'manager') {
+    db.prepare('UPDATE users SET manager_id = NULL WHERE manager_id = ?').run(person.id);
+  }
+  if (role !== 'employee') {
+    db.prepare('UPDATE users SET manager_id = NULL WHERE id = ?').run(person.id);
+  }
+  res.json({ ok: true });
+});
+
+router.post('/team/manager', signedIn, adminOnly, function (req, res) {
+  const email = clean(req.body.email).toLowerCase();
+  const managerEmail = clean(req.body.managerEmail).toLowerCase();
+
+  const person = db.prepare(`
+    SELECT * FROM users
+    WHERE email = ? AND company_id = ?
+  `).get(email, req.user.company_id);
+
+  if (!person) {
+    res.status(404).json({ error: 'This person is not in your company.' });
+    return;
+  }
+  if (person.role !== 'employee') {
+    res.status(400).json({ error: 'Only employees report to a manager.' });
+    return;
+  }
+
+  let managerId = null;
+  if (managerEmail !== '') {
+    const manager = db.prepare(`
+      SELECT * FROM users
+      WHERE email = ? AND company_id = ?
+    `).get(managerEmail, req.user.company_id);
+    if (!manager || manager.role !== 'manager') {
+      res.status(400).json({ error: 'Pick a manager from your company.' });
+      return;
+    }
+    managerId = manager.id;
+  }
+
+  db.prepare('UPDATE users SET manager_id = ? WHERE id = ?').run(managerId, person.id);
   res.json({ ok: true });
 });
 

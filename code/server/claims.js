@@ -43,7 +43,7 @@ function claimInfo(claim) {
     reason: claim.reason,
     receiptName: claim.receipt_name,
     status: claim.status,
-    reviewNote: claim.review_note
+    reviewNote: claim.finance_note || claim.review_note
   };
 }
 

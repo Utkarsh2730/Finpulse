@@ -32,6 +32,9 @@ function today() {
 }
 
 function statusName(status) {
+  if (status === 'manager_approved') {
+    return 'With finance';
+  }
   return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
